@@ -1,0 +1,108 @@
+import json
+import os
+import logging
+from datetime import datetime
+
+# Configuration des logs
+logging.basicConfig(filename='generate_manifest.log', level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+def load_json(filepath):
+    """
+    Charge un fichier JSON et retourne son contenu.
+    """
+    try:
+        with open(filepath, 'r') as file:
+            data = json.load(file)
+        logging.info(f"Chargement réussi du fichier JSON : {filepath}")
+        return data
+    except Exception as e:
+        logging.error(f"Erreur lors du chargement de {filepath} : {e}")
+        return {}
+
+def generate_module_section(data):
+    """
+    Génère la section des modules d'Ordos à partir des données JSON.
+    """
+    section = ["## 📦 Modules d'Ordos\n"]
+    for module in data:
+        section.append(f"### 🔹 Module : {module['module']}")
+        section.append(f"**Fonction** : {module['function']}")
+        section.append(f"**Statut** : {module['status']}")
+        section.append(f"**Description** : {module['description']}")
+        section.append(f"**Fonctionnalités clés** : {', '.join(module['key_features'])}")
+        section.append(f"**Logique** : {module['logic']}\n")
+    return "\n".join(section)
+
+def generate_results_section(data):
+    """
+    Génère la section des résultats des outils à partir des données JSON.
+    """
+    section = ["## 🛠️ Outils et résultats\n"]
+    for result in data:
+        section.append(f"### 🔹 Outil : {result['tool_name']}")
+        section.append(f"**Temps de développement** : {result['development_time']}")
+        section.append(f"**Impact** : {result['impact']}")
+        section.append(f"**Résultat final** : {result['outcome']}")
+        section.append(f"**Contexte** : {result['context']}\n")
+    return "\n".join(section)
+
+def generate_audit_section(data):
+    """
+    Génère la section de contrôle des dérives à partir des données JSON.
+    """
+    section = ["## 🔍 Contrôle des dérives\n"]
+    for audit in data:
+        section.append(f"### 🔹 Module : {audit['module_name']}")
+        section.append(f"**Type de dérive** : {audit['derivation_type']}")
+        section.append(f"**Impact** : {audit['impact']}")
+        section.append(f"**Heure de la détection** : {audit['timestamp']}")
+        section.append(f"**Action recommandée** : {audit['recommended_action']}\n")
+    return "\n".join(section)
+
+def export_manifest(content, output_format='txt'):
+    """
+    Exporte le manifeste au format .txt ou .md.
+    """
+    filename = f'Manifeste_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{output_format}'
+    try:
+        with open(filename, 'w') as file:
+            file.write(content)
+        logging.info(f"Manifeste exporté au format {output_format} : {filename}")
+    except Exception as e:
+        logging.error(f"Erreur lors de l'export du manifeste : {e}")
+
+def main():
+    """
+    Point d'entrée principal du script. Charge les fichiers, génère les sections 
+    et exporte le manifeste au format .txt et .md.
+    """
+    # Chemins des fichiers JSON
+    ordos_path = os.path.join('data', 'Ordos.json')
+    results_path = os.path.join('data', 'Results.json')
+    audit_path = os.path.join('data', 'Audit_Dérives.json')
+
+    # Charger les fichiers JSON
+    ordos_data = load_json(ordos_path)
+    results_data = load_json(results_path)
+    audit_data = load_json(audit_path)
+
+    # Générer les sections
+    module_section = generate_module_section(ordos_data)
+    results_section = generate_results_section(results_data)
+    audit_section = generate_audit_section(audit_data)
+
+    # Fusionner toutes les sections
+    manifest_content = "\n".join([
+        "# 📘 Manifeste du cadre Ordos\n",
+        module_section,
+        results_section,
+        audit_section
+    ])
+
+    # Exporter le manifeste en .txt et .md
+    export_manifest(manifest_content, 'txt')
+    export_manifest(manifest_content, 'md')
+
+if __name__ == "__main__":
+    main()

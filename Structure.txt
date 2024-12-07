@@ -1,6 +1,21 @@
-📁 ordos-manifeste/
- ┣ 📄 generate_manifest.py  <- Script principal
- ┣ 📁 data/
- ┃ ┣ 📄 Ordos.json         <- Structure des modules
- ┃ ┣ 📄 Results.json       <- Résultats des outils
- ┃ ┗ 📄 Audit_Dérives.json <- Suivi des dérives
+
+Ordos - High-Level Architecture
+
+1. GSM (Global Scenario Management)
+   - Synchronize and prioritize global objectives
+   - Dynamic adaptation of system-wide goals
+
+2. GMS (Generalized Modular Separation)
+   - Ensures module isolation for independent execution
+   - Provides controlled interfaces for inter-module communication
+
+3. GRO (Global Results Optimizer)
+   - Collects results from all modules
+   - Resolves conflicts using consensus mechanisms
+
+4. CDI (Correction of Drift Inherent)
+   - Detects and corrects misalignments between modules
+   - Monitors drift thresholds and triggers escalations if needed
+
+5. Hidden Modules (3 Confidential Modules)
+   - These modules remain confidential to protect competitive advantages
